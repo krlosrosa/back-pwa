@@ -6,7 +6,7 @@ import {
   devolucaImagens,
   devolucaoAnomalias,
 } from '../drizzle/config/migrations/schema.js';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { AddAnomaliaDto } from '../../../domain/devolucao/model/add-anomalia.schema.js';
 
 export class AnomaliaDrizzleRepository implements IAnomaliaDevolucaoRepository {
@@ -15,9 +15,19 @@ export class AnomaliaDrizzleRepository implements IAnomaliaDevolucaoRepository {
     private readonly db: DrizzleClient,
   ) {}
   async removeAnomalia(anomaliaId: string): Promise<void> {
-    await this.db
-      .delete(devolucaoAnomalias)
-      .where(eq(devolucaoAnomalias.uuid, anomaliaId));
+    await this.db.transaction(async (tx) => {
+      await tx
+        .delete(devolucaoAnomalias)
+        .where(eq(devolucaoAnomalias.uuid, anomaliaId));
+      await tx
+        .delete(devolucaImagens)
+        .where(
+          and(
+            eq(devolucaImagens.processo, 'devolucao-anomalias'),
+            eq(devolucaImagens.tag, anomaliaId),
+          ),
+        );
+    });
   }
   async addAnomalia(anomalia: AddAnomaliaDto): Promise<void> {
     await this.db.transaction(async (tx) => {
