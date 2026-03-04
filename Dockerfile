@@ -16,6 +16,7 @@ RUN npm install --legacy-peer-deps --loglevel=error
 # Copiar código fonte
 COPY . .
 
+
 # Fazer build da aplicação
 RUN npm run build
 
