@@ -1,0 +1,5191 @@
+{
+  "id": "00000000-0000-0000-0000-000000000000",
+  "prevId": "",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.Demanda": {
+      "name": "Demanda",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "processo": {
+          "name": "processo",
+          "type": "TipoProcesso",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "inicio": {
+          "name": "inicio",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fim": {
+          "name": "fim",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "StatusDemanda",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'EM_PROGRESSO'"
+        },
+        "cadastradoPorId": {
+          "name": "cadastradoPorId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "turno": {
+          "name": "turno",
+          "type": "Turno",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "funcionarioId": {
+          "name": "funcionarioId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "criadoEm": {
+          "name": "criadoEm",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "centerId": {
+          "name": "centerId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "obs": {
+          "name": "obs",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "dataExpedicao": {
+          "name": "dataExpedicao",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {
+        "idx_demanda_center_id": {
+          "name": "idx_demanda_center_id",
+          "columns": [
+            {
+              "expression": "centerId",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "text_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_demanda_center_processo": {
+          "name": "idx_demanda_center_processo",
+          "columns": [
+            {
+              "expression": "centerId",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "text_ops",
+              "isExpression": false
+            },
+            {
+              "expression": "processo",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "text_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_demanda_criado_em": {
+          "name": "idx_demanda_criado_em",
+          "columns": [
+            {
+              "expression": "criadoEm",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "timestamp_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_demanda_funcionario_id": {
+          "name": "idx_demanda_funcionario_id",
+          "columns": [
+            {
+              "expression": "funcionarioId",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "text_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_demanda_id": {
+          "name": "idx_demanda_id",
+          "columns": [
+            {
+              "expression": "id",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "int4_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_demanda_processo": {
+          "name": "idx_demanda_processo",
+          "columns": [
+            {
+              "expression": "processo",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "enum_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_demanda_status": {
+          "name": "idx_demanda_status",
+          "columns": [
+            {
+              "expression": "status",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "enum_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_demanda_turno": {
+          "name": "idx_demanda_turno",
+          "columns": [
+            {
+              "expression": "turno",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "enum_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "Demanda_cadastradoPorId_fkey": {
+          "name": "Demanda_cadastradoPorId_fkey",
+          "tableFrom": "Demanda",
+          "tableTo": "User",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "cadastradoPorId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        },
+        "Demanda_centerId_fkey": {
+          "name": "Demanda_centerId_fkey",
+          "tableFrom": "Demanda",
+          "tableTo": "Center",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "centerId"
+          ],
+          "columnsTo": [
+            "centerId"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        },
+        "Demanda_funcionarioId_fkey": {
+          "name": "Demanda_funcionarioId_fkey",
+          "tableFrom": "Demanda",
+          "tableTo": "User",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "funcionarioId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.Configuracao": {
+      "name": "Configuracao",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "chave": {
+          "name": "chave",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "valor": {
+          "name": "valor",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "descricao": {
+          "name": "descricao",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "centerId": {
+          "name": "centerId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "Configuracao_chave_centerId_key": {
+          "name": "Configuracao_chave_centerId_key",
+          "columns": [
+            {
+              "expression": "chave",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "text_ops",
+              "isExpression": false
+            },
+            {
+              "expression": "centerId",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "text_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "Configuracao_centerId_fkey": {
+          "name": "Configuracao_centerId_fkey",
+          "tableFrom": "Configuracao",
+          "tableTo": "Center",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "centerId"
+          ],
+          "columnsTo": [
+            "centerId"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.CorteMercadoria": {
+      "name": "CorteMercadoria",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "produto": {
+          "name": "produto",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "lote": {
+          "name": "lote",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "unidades": {
+          "name": "unidades",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "motivo": {
+          "name": "motivo",
+          "type": "MotivoCorteMercadoria",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "realizado": {
+          "name": "realizado",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "criadoEm": {
+          "name": "criadoEm",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "atualizadoEm": {
+          "name": "atualizadoEm",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "criadoPorId": {
+          "name": "criadoPorId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'421931'"
+        },
+        "transporteId": {
+          "name": "transporteId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "direcao": {
+          "name": "direcao",
+          "type": "DirecaoCorte",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "caixas": {
+          "name": "caixas",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "centerId": {
+          "name": "centerId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "descricao": {
+          "name": "descricao",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "realizadoPorId": {
+          "name": "realizadoPorId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "CorteMercadoria_centerId_fkey": {
+          "name": "CorteMercadoria_centerId_fkey",
+          "tableFrom": "CorteMercadoria",
+          "tableTo": "Center",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "centerId"
+          ],
+          "columnsTo": [
+            "centerId"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        },
+        "CorteMercadoria_criadoPorId_fkey": {
+          "name": "CorteMercadoria_criadoPorId_fkey",
+          "tableFrom": "CorteMercadoria",
+          "tableTo": "User",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "criadoPorId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        },
+        "CorteMercadoria_realizadoPorId_fkey": {
+          "name": "CorteMercadoria_realizadoPorId_fkey",
+          "tableFrom": "CorteMercadoria",
+          "tableTo": "User",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "realizadoPorId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "cascade"
+        },
+        "CorteMercadoria_transporteId_fkey": {
+          "name": "CorteMercadoria_transporteId_fkey",
+          "tableFrom": "CorteMercadoria",
+          "tableTo": "Transporte",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "transporteId"
+          ],
+          "columnsTo": [
+            "numeroTransporte"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.Center": {
+      "name": "Center",
+      "schema": "",
+      "columns": {
+        "centerId": {
+          "name": "centerId",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "state": {
+          "name": "state",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "cluster": {
+          "name": "cluster",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "Center_centerId_key": {
+          "name": "Center_centerId_key",
+          "columns": [
+            {
+              "expression": "centerId",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "text_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.DashboardProdutividadeCenter": {
+      "name": "DashboardProdutividadeCenter",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "dataRegistro": {
+          "name": "dataRegistro",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "centerId": {
+          "name": "centerId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "cluster": {
+          "name": "cluster",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'distribuicao'"
+        },
+        "empresa": {
+          "name": "empresa",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'LACTALIS'"
+        },
+        "totalCaixas": {
+          "name": "totalCaixas",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "totalUnidades": {
+          "name": "totalUnidades",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "totalPaletes": {
+          "name": "totalPaletes",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "totalEnderecos": {
+          "name": "totalEnderecos",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "totalPausasQuantidade": {
+          "name": "totalPausasQuantidade",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "totalPausasTempo": {
+          "name": "totalPausasTempo",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "totalTempoTrabalhado": {
+          "name": "totalTempoTrabalhado",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "totalDemandas": {
+          "name": "totalDemandas",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "processo": {
+          "name": "processo",
+          "type": "TipoProcesso",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "turno": {
+          "name": "turno",
+          "type": "Turno",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "criadoEm": {
+          "name": "criadoEm",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "atualizadoEm": {
+          "name": "atualizadoEm",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "DashboardProdutividadeCenter_centerId_processo_dataRegistro_key": {
+          "name": "DashboardProdutividadeCenter_centerId_processo_dataRegistro_key",
+          "columns": [
+            {
+              "expression": "centerId",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "text_ops",
+              "isExpression": false
+            },
+            {
+              "expression": "processo",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "enum_ops",
+              "isExpression": false
+            },
+            {
+              "expression": "dataRegistro",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "timestamp_ops",
+              "isExpression": false
+            },
+            {
+              "expression": "turno",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "enum_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "DashboardProdutividadeCenter_centerId_fkey": {
+          "name": "DashboardProdutividadeCenter_centerId_fkey",
+          "tableFrom": "DashboardProdutividadeCenter",
+          "tableTo": "Center",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "centerId"
+          ],
+          "columnsTo": [
+            "centerId"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.DashboardProdutividadeUser": {
+      "name": "DashboardProdutividadeUser",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "dataRegistro": {
+          "name": "dataRegistro",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "centerId": {
+          "name": "centerId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "funcionarioId": {
+          "name": "funcionarioId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "totalCaixas": {
+          "name": "totalCaixas",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "totalUnidades": {
+          "name": "totalUnidades",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "totalPaletes": {
+          "name": "totalPaletes",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "totalEnderecos": {
+          "name": "totalEnderecos",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "totalPausasQuantidade": {
+          "name": "totalPausasQuantidade",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "totalPausasTempo": {
+          "name": "totalPausasTempo",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "totalTempoTrabalhado": {
+          "name": "totalTempoTrabalhado",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "totalDemandas": {
+          "name": "totalDemandas",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "processo": {
+          "name": "processo",
+          "type": "TipoProcesso",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "turno": {
+          "name": "turno",
+          "type": "Turno",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "criadoEm": {
+          "name": "criadoEm",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "atualizadoEm": {
+          "name": "atualizadoEm",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "DashboardProdutividadeUser_funcionarioId_centerId_processo__key": {
+          "name": "DashboardProdutividadeUser_funcionarioId_centerId_processo__key",
+          "columns": [
+            {
+              "expression": "funcionarioId",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "text_ops",
+              "isExpression": false
+            },
+            {
+              "expression": "centerId",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "enum_ops",
+              "isExpression": false
+            },
+            {
+              "expression": "processo",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "timestamp_ops",
+              "isExpression": false
+            },
+            {
+              "expression": "dataRegistro",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "timestamp_ops",
+              "isExpression": false
+            },
+            {
+              "expression": "turno",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "enum_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "DashboardProdutividadeUser_centerId_fkey": {
+          "name": "DashboardProdutividadeUser_centerId_fkey",
+          "tableFrom": "DashboardProdutividadeUser",
+          "tableTo": "Center",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "centerId"
+          ],
+          "columnsTo": [
+            "centerId"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        },
+        "DashboardProdutividadeUser_funcionarioId_fkey": {
+          "name": "DashboardProdutividadeUser_funcionarioId_fkey",
+          "tableFrom": "DashboardProdutividadeUser",
+          "tableTo": "User",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "funcionarioId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.DevolucaImagens": {
+      "name": "DevolucaImagens",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "demandaId": {
+          "name": "demandaId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "processo": {
+          "name": "processo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tag": {
+          "name": "tag",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "DevolucaImagens_demandaId_fkey": {
+          "name": "DevolucaImagens_demandaId_fkey",
+          "tableFrom": "DevolucaImagens",
+          "tableTo": "devolucao_demanda",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "demandaId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.ConfiguracaoImpressaoMapa": {
+      "name": "ConfiguracaoImpressaoMapa",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "tipoImpressao": {
+          "name": "tipoImpressao",
+          "type": "TipoImpressao",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quebraPalete": {
+          "name": "quebraPalete",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "tipoQuebra": {
+          "name": "tipoQuebra",
+          "type": "TipoQuebraPalete",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "valorQuebra": {
+          "name": "valorQuebra",
+          "type": "numeric(65, 30)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "separarPaleteFull": {
+          "name": "separarPaleteFull",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "separarUnidades": {
+          "name": "separarUnidades",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "exibirInfoCabecalho": {
+          "name": "exibirInfoCabecalho",
+          "type": "ExibirClienteCabecalhoEnum",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'NENHUM'"
+        },
+        "segregarFifo": {
+          "name": "segregarFifo",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "dataMaximaPercentual": {
+          "name": "dataMaximaPercentual",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "centerId": {
+          "name": "centerId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "atribuidoPorId": {
+          "name": "atribuidoPorId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "empresa": {
+          "name": "empresa",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'LDB'"
+        },
+        "tipoImpressaoConferencia": {
+          "name": "tipoImpressaoConferencia",
+          "type": "TipoImpressao",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'TRANSPORTE'"
+        },
+        "ordemConferencia": {
+          "name": "ordemConferencia",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'{\"RAY\"}'"
+        },
+        "ordemFifo": {
+          "name": "ordemFifo",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'{\"RAY\"}'"
+        },
+        "ordemPaletes": {
+          "name": "ordemPaletes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'{\"RAY\"}'"
+        },
+        "ordemPicking": {
+          "name": "ordemPicking",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'{\"RAY\"}'"
+        },
+        "ordemUnidades": {
+          "name": "ordemUnidades",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'{\"RAY\"}'"
+        }
+      },
+      "indexes": {
+        "ConfiguracaoImpressaoMapa_centerId_empresa_key": {
+          "name": "ConfiguracaoImpressaoMapa_centerId_empresa_key",
+          "columns": [
+            {
+              "expression": "centerId",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "text_ops",
+              "isExpression": false
+            },
+            {
+              "expression": "empresa",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "text_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "ConfiguracaoImpressaoMapa_atribuidoPorId_fkey": {
+          "name": "ConfiguracaoImpressaoMapa_atribuidoPorId_fkey",
+          "tableFrom": "ConfiguracaoImpressaoMapa",
+          "tableTo": "User",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "atribuidoPorId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "cascade"
+        },
+        "ConfiguracaoImpressaoMapa_centerId_fkey": {
+          "name": "ConfiguracaoImpressaoMapa_centerId_fkey",
+          "tableFrom": "ConfiguracaoImpressaoMapa",
+          "tableTo": "Center",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "centerId"
+          ],
+          "columnsTo": [
+            "centerId"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.HistoricoImpressaoMapa": {
+      "name": "HistoricoImpressaoMapa",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "impressoEm": {
+          "name": "impressoEm",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "transporteId": {
+          "name": "transporteId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "impressoPorId": {
+          "name": "impressoPorId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tipoImpressao": {
+          "name": "tipoImpressao",
+          "type": "TipoProcesso",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "HistoricoImpressaoMapa_impressoPorId_fkey": {
+          "name": "HistoricoImpressaoMapa_impressoPorId_fkey",
+          "tableFrom": "HistoricoImpressaoMapa",
+          "tableTo": "User",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "impressoPorId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        },
+        "HistoricoImpressaoMapa_transporteId_fkey": {
+          "name": "HistoricoImpressaoMapa_transporteId_fkey",
+          "tableFrom": "HistoricoImpressaoMapa",
+          "tableTo": "Transporte",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "transporteId"
+          ],
+          "columnsTo": [
+            "numeroTransporte"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.Palete": {
+      "name": "Palete",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "empresa": {
+          "name": "empresa",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quantidadeCaixas": {
+          "name": "quantidadeCaixas",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quantidadeUnidades": {
+          "name": "quantidadeUnidades",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quantidadePaletes": {
+          "name": "quantidadePaletes",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "enderecoVisitado": {
+          "name": "enderecoVisitado",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "segmento": {
+          "name": "segmento",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "transporteId": {
+          "name": "transporteId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tipoProcesso": {
+          "name": "tipoProcesso",
+          "type": "TipoProcesso",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'SEPARACAO'"
+        },
+        "criadoEm": {
+          "name": "criadoEm",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "atualizadoEm": {
+          "name": "atualizadoEm",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "demandaId": {
+          "name": "demandaId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "StatusPalete",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'NAO_INICIADO'"
+        },
+        "validado": {
+          "name": "validado",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "criadoPorId": {
+          "name": "criadoPorId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fim": {
+          "name": "fim",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "inicio": {
+          "name": "inicio",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "totalCaixas": {
+          "name": "totalCaixas",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "pesoLiquido": {
+          "name": "pesoLiquido",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        }
+      },
+      "indexes": {
+        "idx_palete_demanda": {
+          "name": "idx_palete_demanda",
+          "columns": [
+            {
+              "expression": "demandaId",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "int4_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_palete_demanda_id": {
+          "name": "idx_palete_demanda_id",
+          "columns": [
+            {
+              "expression": "demandaId",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "int4_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_palete_empresa": {
+          "name": "idx_palete_empresa",
+          "columns": [
+            {
+              "expression": "empresa",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "text_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_palete_id": {
+          "name": "idx_palete_id",
+          "columns": [
+            {
+              "expression": "id",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "text_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_palete_segmento": {
+          "name": "idx_palete_segmento",
+          "columns": [
+            {
+              "expression": "segmento",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "text_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_palete_transporte": {
+          "name": "idx_palete_transporte",
+          "columns": [
+            {
+              "expression": "transporteId",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "text_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_palete_transporte_id": {
+          "name": "idx_palete_transporte_id",
+          "columns": [
+            {
+              "expression": "transporteId",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "text_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "Palete_criadoPorId_fkey": {
+          "name": "Palete_criadoPorId_fkey",
+          "tableFrom": "Palete",
+          "tableTo": "User",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "criadoPorId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        },
+        "Palete_demandaId_fkey": {
+          "name": "Palete_demandaId_fkey",
+          "tableFrom": "Palete",
+          "tableTo": "Demanda",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "demandaId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "Palete_transporteId_fkey": {
+          "name": "Palete_transporteId_fkey",
+          "tableFrom": "Palete",
+          "tableTo": "Transporte",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "transporteId"
+          ],
+          "columnsTo": [
+            "numeroTransporte"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.PausaGeral": {
+      "name": "PausaGeral",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "inicio": {
+          "name": "inicio",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fim": {
+          "name": "fim",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "motivo": {
+          "name": "motivo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "centerId": {
+          "name": "centerId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "processo": {
+          "name": "processo",
+          "type": "TipoProcesso",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "turno": {
+          "name": "turno",
+          "type": "Turno",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "registradoPorId": {
+          "name": "registradoPorId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "criadoEm": {
+          "name": "criadoEm",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "atualizadoEm": {
+          "name": "atualizadoEm",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "segmento": {
+          "name": "segmento",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "PausaGeral_centerId_fkey": {
+          "name": "PausaGeral_centerId_fkey",
+          "tableFrom": "PausaGeral",
+          "tableTo": "Center",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "centerId"
+          ],
+          "columnsTo": [
+            "centerId"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        },
+        "PausaGeral_registradoPorId_fkey": {
+          "name": "PausaGeral_registradoPorId_fkey",
+          "tableFrom": "PausaGeral",
+          "tableTo": "User",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "registradoPorId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.Pausa": {
+      "name": "Pausa",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "inicio": {
+          "name": "inicio",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fim": {
+          "name": "fim",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "motivo": {
+          "name": "motivo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "descricao": {
+          "name": "descricao",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "demandaId": {
+          "name": "demandaId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "registradoPorId": {
+          "name": "registradoPorId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "pausaGeralId": {
+          "name": "pausaGeralId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "idx_pausa_demanda_id": {
+          "name": "idx_pausa_demanda_id",
+          "columns": [
+            {
+              "expression": "demandaId",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "int4_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "Pausa_demandaId_fkey": {
+          "name": "Pausa_demandaId_fkey",
+          "tableFrom": "Pausa",
+          "tableTo": "Demanda",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "demandaId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "Pausa_pausaGeralId_fkey": {
+          "name": "Pausa_pausaGeralId_fkey",
+          "tableFrom": "Pausa",
+          "tableTo": "PausaGeral",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "pausaGeralId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "cascade"
+        },
+        "Pausa_registradoPorId_fkey": {
+          "name": "Pausa_registradoPorId_fkey",
+          "tableFrom": "Pausa",
+          "tableTo": "User",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "registradoPorId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.HistoricoStatusTransporte": {
+      "name": "HistoricoStatusTransporte",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "alteradoEm": {
+          "name": "alteradoEm",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "tipoEvento": {
+          "name": "tipoEvento",
+          "type": "TipoEvento",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "descricao": {
+          "name": "descricao",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "transporteId": {
+          "name": "transporteId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "alteradoPorId": {
+          "name": "alteradoPorId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "processo": {
+          "name": "processo",
+          "type": "TipoProcesso",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'SEPARACAO'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "HistoricoStatusTransporte_alteradoPorId_fkey": {
+          "name": "HistoricoStatusTransporte_alteradoPorId_fkey",
+          "tableFrom": "HistoricoStatusTransporte",
+          "tableTo": "User",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "alteradoPorId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "cascade"
+        },
+        "HistoricoStatusTransporte_transporteId_fkey": {
+          "name": "HistoricoStatusTransporte_transporteId_fkey",
+          "tableFrom": "HistoricoStatusTransporte",
+          "tableTo": "Transporte",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "transporteId"
+          ],
+          "columnsTo": [
+            "numeroTransporte"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.Transporte": {
+      "name": "Transporte",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "numeroTransporte": {
+          "name": "numeroTransporte",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "StatusTransporte",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'AGUARDANDO_SEPARACAO'"
+        },
+        "nomeRota": {
+          "name": "nomeRota",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nomeTransportadora": {
+          "name": "nomeTransportadora",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "placa": {
+          "name": "placa",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "criadoEm": {
+          "name": "criadoEm",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "atualizadoEm": {
+          "name": "atualizadoEm",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "cadastradoPorId": {
+          "name": "cadastradoPorId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "dataExpedicao": {
+          "name": "dataExpedicao",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "centerId": {
+          "name": "centerId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "obs": {
+          "name": "obs",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "prioridade": {
+          "name": "prioridade",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "carregamento": {
+          "name": "carregamento",
+          "type": "StatusPalete",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'NAO_INICIADO'"
+        },
+        "conferencia": {
+          "name": "conferencia",
+          "type": "StatusPalete",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'NAO_INICIADO'"
+        },
+        "separacao": {
+          "name": "separacao",
+          "type": "StatusPalete",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'NAO_INICIADO'"
+        },
+        "cargaParada": {
+          "name": "cargaParada",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        }
+      },
+      "indexes": {
+        "idx_transporte_data_expedicao": {
+          "name": "idx_transporte_data_expedicao",
+          "columns": [
+            {
+              "expression": "dataExpedicao",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "timestamp_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_transporte_numero_transporte": {
+          "name": "idx_transporte_numero_transporte",
+          "columns": [
+            {
+              "expression": "numeroTransporte",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "text_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "Transporte_cadastradoPorId_fkey": {
+          "name": "Transporte_cadastradoPorId_fkey",
+          "tableFrom": "Transporte",
+          "tableTo": "User",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "cadastradoPorId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        },
+        "Transporte_centerId_fkey": {
+          "name": "Transporte_centerId_fkey",
+          "tableFrom": "Transporte",
+          "tableTo": "Center",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "centerId"
+          ],
+          "columnsTo": [
+            "centerId"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.devolucao_check_list": {
+      "name": "devolucao_check_list",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "temperaturaBau": {
+          "name": "temperaturaBau",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "temperaturaProduto": {
+          "name": "temperaturaProduto",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "demandaId": {
+          "name": "demandaId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "criadoEm": {
+          "name": "criadoEm",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "atualizadoEm": {
+          "name": "atualizadoEm",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "anomalias": {
+          "name": "anomalias",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "devolucao_check_list_demandaId_key": {
+          "name": "devolucao_check_list_demandaId_key",
+          "columns": [
+            {
+              "expression": "demandaId",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "int4_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "devolucao_check_list_demandaId_fkey": {
+          "name": "devolucao_check_list_demandaId_fkey",
+          "tableFrom": "devolucao_check_list",
+          "tableTo": "devolucao_demanda",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "demandaId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.devolucao_historico_status": {
+      "name": "devolucao_historico_status",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "devolucaoDemandaId": {
+          "name": "devolucaoDemandaId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "StatusDevolucao",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "responsavelId": {
+          "name": "responsavelId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "criadoEm": {
+          "name": "criadoEm",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "devolucao_historico_status_devolucaoDemandaId_fkey": {
+          "name": "devolucao_historico_status_devolucaoDemandaId_fkey",
+          "tableFrom": "devolucao_historico_status",
+          "tableTo": "devolucao_demanda",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "devolucaoDemandaId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "devolucao_historico_status_responsavelId_fkey": {
+          "name": "devolucao_historico_status_responsavelId_fkey",
+          "tableFrom": "devolucao_historico_status",
+          "tableTo": "User",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "responsavelId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.devolucao_itens": {
+      "name": "devolucao_itens",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "sku": {
+          "name": "sku",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "descricao": {
+          "name": "descricao",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "lote": {
+          "name": "lote",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fabricacao": {
+          "name": "fabricacao",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sif": {
+          "name": "sif",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "quantidadeCaixas": {
+          "name": "quantidadeCaixas",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "quantidadeUnidades": {
+          "name": "quantidadeUnidades",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tipo": {
+          "name": "tipo",
+          "type": "TipoDevolucaoItens",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "devolucaoNotasId": {
+          "name": "devolucaoNotasId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "demandaId": {
+          "name": "demandaId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "avariaCaixas": {
+          "name": "avariaCaixas",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "avariaUnidades": {
+          "name": "avariaUnidades",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nota_id": {
+          "name": "nota_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "id_nota": {
+          "name": "id_nota",
+          "tableFrom": "devolucao_itens",
+          "tableTo": "devolucao_notas",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "nota_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "devolucao_itens_demandaId_fkey": {
+          "name": "devolucao_itens_demandaId_fkey",
+          "tableFrom": "devolucao_itens",
+          "tableTo": "devolucao_demanda",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "demandaId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.devolucao_notas": {
+      "name": "devolucao_notas",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "empresa": {
+          "name": "empresa",
+          "type": "Empresa",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "devolucaoDemandaId": {
+          "name": "devolucaoDemandaId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "notaFiscal": {
+          "name": "notaFiscal",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "motivoDevolucao": {
+          "name": "motivoDevolucao",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "descMotivoDevolucao": {
+          "name": "descMotivoDevolucao",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nfParcial": {
+          "name": "nfParcial",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "idViagemRavex": {
+          "name": "idViagemRavex",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "criadoEm": {
+          "name": "criadoEm",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "atualizadoEm": {
+          "name": "atualizadoEm",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tipo": {
+          "name": "tipo",
+          "type": "TipoDevolucaoNotas",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'DEVOLUCAO'"
+        }
+      },
+      "indexes": {
+        "devolucao_notas_idViagem_key": {
+          "name": "devolucao_notas_idViagem_key",
+          "columns": [
+            {
+              "expression": "notaFiscal",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "text_ops",
+              "isExpression": false
+            },
+            {
+              "expression": "idViagemRavex",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "text_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "devolucao_notas_devolucaoDemandaId_fkey": {
+          "name": "devolucao_notas_devolucaoDemandaId_fkey",
+          "tableFrom": "devolucao_notas",
+          "tableTo": "devolucao_demanda",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "devolucaoDemandaId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public._prisma_migrations": {
+      "name": "_prisma_migrations",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(36)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "checksum": {
+          "name": "checksum",
+          "type": "varchar(64)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "finished_at": {
+          "name": "finished_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "migration_name": {
+          "name": "migration_name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "logs": {
+          "name": "logs",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "rolled_back_at": {
+          "name": "rolled_back_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "started_at": {
+          "name": "started_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "applied_steps_count": {
+          "name": "applied_steps_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.User": {
+      "name": "User",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "password": {
+          "name": "password",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "centerId": {
+          "name": "centerId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "token": {
+          "name": "token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "turno": {
+          "name": "turno",
+          "type": "Turno",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'NOITE'"
+        },
+        "resetSenha": {
+          "name": "resetSenha",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "empresa": {
+          "name": "empresa",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'LDB'"
+        }
+      },
+      "indexes": {
+        "idx_user_id": {
+          "name": "idx_user_id",
+          "columns": [
+            {
+              "expression": "id",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "text_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_user_name_trgm": {
+          "name": "idx_user_name_trgm",
+          "columns": [
+            {
+              "expression": "name",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "gin_trgm_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "User_centerId_fkey": {
+          "name": "User_centerId_fkey",
+          "tableFrom": "User",
+          "tableTo": "Center",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "centerId"
+          ],
+          "columnsTo": [
+            "centerId"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.devolucao_demanda": {
+      "name": "devolucao_demanda",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "placa": {
+          "name": "placa",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "motorista": {
+          "name": "motorista",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "idTransportadora": {
+          "name": "idTransportadora",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "telefone": {
+          "name": "telefone",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cargaSegregada": {
+          "name": "cargaSegregada",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "quantidadePaletes": {
+          "name": "quantidadePaletes",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": 0
+        },
+        "doca": {
+          "name": "doca",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "centerId": {
+          "name": "centerId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "adicionadoPorId": {
+          "name": "adicionadoPorId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "conferenteId": {
+          "name": "conferenteId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "criadoEm": {
+          "name": "criadoEm",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "atualizadoEm": {
+          "name": "atualizadoEm",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "StatusDevolucao",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'AGUARDANDO_LIBERACAO'"
+        },
+        "fechouComAnomalia": {
+          "name": "fechouComAnomalia",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "liberadoParaConferenciaEm": {
+          "name": "liberadoParaConferenciaEm",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "inicioConferenciaEm": {
+          "name": "inicioConferenciaEm",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fimConferenciaEm": {
+          "name": "fimConferenciaEm",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "finalizadoEm": {
+          "name": "finalizadoEm",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "senha": {
+          "name": "senha",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "viagemId": {
+          "name": "viagemId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "devolucao_demanda_adicionadoPorId_fkey": {
+          "name": "devolucao_demanda_adicionadoPorId_fkey",
+          "tableFrom": "devolucao_demanda",
+          "tableTo": "User",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "adicionadoPorId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        },
+        "devolucao_demanda_centerId_fkey": {
+          "name": "devolucao_demanda_centerId_fkey",
+          "tableFrom": "devolucao_demanda",
+          "tableTo": "Center",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "centerId"
+          ],
+          "columnsTo": [
+            "centerId"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        },
+        "devolucao_demanda_conferenteId_fkey": {
+          "name": "devolucao_demanda_conferenteId_fkey",
+          "tableFrom": "devolucao_demanda",
+          "tableTo": "User",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "conferenteId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.devolucao_anomalias": {
+      "name": "devolucao_anomalias",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "demandaId": {
+          "name": "demandaId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tipo": {
+          "name": "tipo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tratado": {
+          "name": "tratado",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "sku": {
+          "name": "sku",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "descricao": {
+          "name": "descricao",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "lote": {
+          "name": "lote",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quantidadeCaixas": {
+          "name": "quantidadeCaixas",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quantidadeUnidades": {
+          "name": "quantidadeUnidades",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "criadoEm": {
+          "name": "criadoEm",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "atualizadoEm": {
+          "name": "atualizadoEm",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "natureza": {
+          "name": "natureza",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "causa": {
+          "name": "causa",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "devolucao_anomalias_demandaId_fkey": {
+          "name": "devolucao_anomalias_demandaId_fkey",
+          "tableFrom": "devolucao_anomalias",
+          "tableTo": "devolucao_demanda",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "demandaId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.imagem": {
+      "name": "imagem",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "url": {
+          "name": "url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tipo": {
+          "name": "tipo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "processo_id": {
+          "name": "processo_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tipoProcesso": {
+          "name": "tipoProcesso",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.produto": {
+      "name": "produto",
+      "schema": "",
+      "columns": {
+        "codEan": {
+          "name": "codEan",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "codDum": {
+          "name": "codDum",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sku": {
+          "name": "sku",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "descricao": {
+          "name": "descricao",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "shelf": {
+          "name": "shelf",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tipoPeso": {
+          "name": "tipoPeso",
+          "type": "TipoPeso",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "pesoLiquidoCaixa": {
+          "name": "pesoLiquidoCaixa",
+          "type": "numeric(65, 30)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "pesoLiquidoUnidade": {
+          "name": "pesoLiquidoUnidade",
+          "type": "numeric(65, 30)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "unPorCaixa": {
+          "name": "unPorCaixa",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "caixaPorPallet": {
+          "name": "caixaPorPallet",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "segmento": {
+          "name": "segmento",
+          "type": "SegmentoProduto",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "empresa": {
+          "name": "empresa",
+          "type": "Empresa",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.rules_engines": {
+      "name": "rules_engines",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "centerId": {
+          "name": "centerId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "enabled": {
+          "name": "enabled",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "conditions": {
+          "name": "conditions",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdBy": {
+          "name": "createdBy",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "processo": {
+          "name": "processo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "criadoPorId": {
+          "name": "criadoPorId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "rules_engines_centerId_enabled_idx": {
+          "name": "rules_engines_centerId_enabled_idx",
+          "columns": [
+            {
+              "expression": "centerId",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "bool_ops",
+              "isExpression": false
+            },
+            {
+              "expression": "enabled",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "text_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "rules_engines_name_centerId_key": {
+          "name": "rules_engines_name_centerId_key",
+          "columns": [
+            {
+              "expression": "name",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "text_ops",
+              "isExpression": false
+            },
+            {
+              "expression": "centerId",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "text_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "rules_engines_centerId_fkey": {
+          "name": "rules_engines_centerId_fkey",
+          "tableFrom": "rules_engines",
+          "tableTo": "Center",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "centerId"
+          ],
+          "columnsTo": [
+            "centerId"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        },
+        "rules_engines_criadoPorId_fkey": {
+          "name": "rules_engines_criadoPorId_fkey",
+          "tableFrom": "rules_engines",
+          "tableTo": "User",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "criadoPorId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.devolucao_transportadoras": {
+      "name": "devolucao_transportadoras",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "nome": {
+          "name": "nome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "centerId": {
+          "name": "centerId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "criadoEm": {
+          "name": "criadoEm",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "atualizadoEm": {
+          "name": "atualizadoEm",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "devolucao_transportadoras_nome_centerId_key": {
+          "name": "devolucao_transportadoras_nome_centerId_key",
+          "columns": [
+            {
+              "expression": "nome",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "text_ops",
+              "isExpression": false
+            },
+            {
+              "expression": "centerId",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "text_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "devolucao_transportadoras_centerId_fkey": {
+          "name": "devolucao_transportadoras_centerId_fkey",
+          "tableFrom": "devolucao_transportadoras",
+          "tableTo": "Center",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "centerId"
+          ],
+          "columnsTo": [
+            "centerId"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.TransporteCargaParada": {
+      "name": "TransporteCargaParada",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "\"TransporteCargaParada_id_seq\"",
+            "increment": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "startWith": "1",
+            "cycle": false,
+            "schema": "public"
+          }
+        },
+        "motivo": {
+          "name": "motivo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "dataExpedicao": {
+          "name": "dataExpedicao",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "transportId": {
+          "name": "transportId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "userId": {
+          "name": "userId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Observacao": {
+          "name": "Observacao",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "transporte_id": {
+          "name": "transporte_id",
+          "tableFrom": "TransporteCargaParada",
+          "tableTo": "Transporte",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "transportId"
+          ],
+          "columnsTo": [
+            "numeroTransporte"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "user_id": {
+          "name": "user_id",
+          "tableFrom": "TransporteCargaParada",
+          "tableTo": "User",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.playing_with_neon": {
+      "name": "playing_with_neon",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "value": {
+          "name": "value",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.produtividade_anomalia": {
+      "name": "produtividade_anomalia",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "demandaId": {
+          "name": "demandaId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "centerId": {
+          "name": "centerId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "funcionarioId": {
+          "name": "funcionarioId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "criadoPorId": {
+          "name": "criadoPorId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "inicio": {
+          "name": "inicio",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fim": {
+          "name": "fim",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "caixas": {
+          "name": "caixas",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "unidades": {
+          "name": "unidades",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "paletes": {
+          "name": "paletes",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "enderecosVisitado": {
+          "name": "enderecosVisitado",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "produtividade": {
+          "name": "produtividade",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "motivoAnomalia": {
+          "name": "motivoAnomalia",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "motivoAnomaliaDescricao": {
+          "name": "motivoAnomaliaDescricao",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "paletesNaDemanda": {
+          "name": "paletesNaDemanda",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "AnomaliaProdutividade_criadoPorId_fkey": {
+          "name": "AnomaliaProdutividade_criadoPorId_fkey",
+          "tableFrom": "produtividade_anomalia",
+          "tableTo": "User",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "criadoPorId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        },
+        "AnomaliaProdutividade_demandaId_fkey": {
+          "name": "AnomaliaProdutividade_demandaId_fkey",
+          "tableFrom": "produtividade_anomalia",
+          "tableTo": "Demanda",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "demandaId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "AnomaliaProdutividade_funcionarioId_fkey": {
+          "name": "AnomaliaProdutividade_funcionarioId_fkey",
+          "tableFrom": "produtividade_anomalia",
+          "tableTo": "User",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "funcionarioId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.movimentacao": {
+      "name": "movimentacao",
+      "schema": "",
+      "columns": {
+        "id_mov": {
+          "name": "id_mov",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "id_usuario": {
+          "name": "id_usuario",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id_centro": {
+          "name": "id_centro",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "palete": {
+          "name": "palete",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "origem": {
+          "name": "origem",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "destino": {
+          "name": "destino",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "prioridade": {
+          "name": "prioridade",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'pendente'"
+        },
+        "data_criacao": {
+          "name": "data_criacao",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "data_execucao": {
+          "name": "data_execucao",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sku": {
+          "name": "sku",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "descricao": {
+          "name": "descricao",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lote": {
+          "name": "lote",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "executado_por": {
+          "name": "executado_por",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "iniciado": {
+          "name": "iniciado",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "id_centro": {
+          "name": "id_centro",
+          "tableFrom": "movimentacao",
+          "tableTo": "Center",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "id_centro"
+          ],
+          "columnsTo": [
+            "centerId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "id_usuario": {
+          "name": "id_usuario",
+          "tableFrom": "movimentacao",
+          "tableTo": "User",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "id_usuario"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "id_executado_por": {
+          "name": "id_executado_por",
+          "tableFrom": "movimentacao",
+          "tableTo": "User",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "executado_por"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.transporte_anomalia": {
+      "name": "transporte_anomalia",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "transporte_anomalia_id_seq",
+            "increment": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "startWith": "1",
+            "cache": "1",
+            "cycle": false,
+            "schema": "public"
+          }
+        },
+        "transporteId": {
+          "name": "transporteId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "anomalia": {
+          "name": "anomalia",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "anomaliaPersonalizada": {
+          "name": "anomaliaPersonalizada",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "transporteId": {
+          "name": "transporteId",
+          "tableFrom": "transporte_anomalia",
+          "tableTo": "Transporte",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "transporteId"
+          ],
+          "columnsTo": [
+            "numeroTransporte"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "uq_transporte_anomalia": {
+          "columns": [
+            "transporteId",
+            "anomalia"
+          ],
+          "nullsNotDistinct": false,
+          "name": "uq_transporte_anomalia"
+        }
+      },
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.lite_validacao": {
+      "name": "lite_validacao",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "data_ref": {
+          "name": "data_ref",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "endereco": {
+          "name": "endereco",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "sku": {
+          "name": "sku",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "descricao": {
+          "name": "descricao",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "data_validade": {
+          "name": "data_validade",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lote": {
+          "name": "lote",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "peso": {
+          "name": "peso",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'0'"
+        },
+        "caixas": {
+          "name": "caixas",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "qtd_palete": {
+          "name": "qtd_palete",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "capacidade_palete": {
+          "name": "capacidade_palete",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "area": {
+          "name": "area",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "centro_id": {
+          "name": "centro_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "codigo_bloqueio": {
+          "name": "codigo_bloqueio",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "validado": {
+          "name": "validado",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "adicionar_por": {
+          "name": "adicionar_por",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contado_por": {
+          "name": "contado_por",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hora_registro": {
+          "name": "hora_registro",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "adicionado_por": {
+          "name": "adicionado_por",
+          "tableFrom": "lite_validacao",
+          "tableTo": "User",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "adicionar_por"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "contado_por": {
+          "name": "contado_por",
+          "tableFrom": "lite_validacao",
+          "tableTo": "User",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "contado_por"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "center_id": {
+          "name": "center_id",
+          "tableFrom": "lite_validacao",
+          "tableTo": "Center",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "centro_id"
+          ],
+          "columnsTo": [
+            "centerId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.lite_anomalia": {
+      "name": "lite_anomalia",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "endereco": {
+          "name": "endereco",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "centro_id": {
+          "name": "centro_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sku": {
+          "name": "sku",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lote": {
+          "name": "lote",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "quantidade": {
+          "name": "quantidade",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "peso": {
+          "name": "peso",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "data_referencia": {
+          "name": "data_referencia",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "add_por": {
+          "name": "add_por",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "add_por_id": {
+          "name": "add_por_id",
+          "tableFrom": "lite_anomalia",
+          "tableTo": "User",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "add_por"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "centro_id": {
+          "name": "centro_id",
+          "tableFrom": "lite_anomalia",
+          "tableTo": "Center",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "centro_id"
+          ],
+          "columnsTo": [
+            "centerId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.UserCenter": {
+      "name": "UserCenter",
+      "schema": "",
+      "columns": {
+        "userId": {
+          "name": "userId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "centerId": {
+          "name": "centerId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "assignedAt": {
+          "name": "assignedAt",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "processo": {
+          "name": "processo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'EXPEDICAO'"
+        },
+        "role": {
+          "name": "role",
+          "type": "Role",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'FUNCIONARIO'"
+        },
+        "roles": {
+          "name": "roles",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "UserCenter_centerId_fkey": {
+          "name": "UserCenter_centerId_fkey",
+          "tableFrom": "UserCenter",
+          "tableTo": "Center",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "centerId"
+          ],
+          "columnsTo": [
+            "centerId"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        },
+        "UserCenter_userId_fkey": {
+          "name": "UserCenter_userId_fkey",
+          "tableFrom": "UserCenter",
+          "tableTo": "User",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "UserCenter_pkey": {
+          "name": "UserCenter_pkey",
+          "columns": [
+            "userId",
+            "centerId",
+            "processo"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {
+    "public.DirecaoCorte": {
+      "name": "DirecaoCorte",
+      "values": [
+        "OPERACIONAL",
+        "ADMINISTRATIVO"
+      ],
+      "schema": "public"
+    },
+    "public.Empresa": {
+      "name": "Empresa",
+      "values": [
+        "ITB",
+        "LDB",
+        "DPA"
+      ],
+      "schema": "public"
+    },
+    "public.ExibirClienteCabecalhoEnum": {
+      "name": "ExibirClienteCabecalhoEnum",
+      "values": [
+        "PRIMEIRO",
+        "TODOS",
+        "NENHUM"
+      ],
+      "schema": "public"
+    },
+    "public.MotivoCorteMercadoria": {
+      "name": "MotivoCorteMercadoria",
+      "values": [
+        "FALTA_MERCADORIA",
+        "FALTA_ESPACO",
+        "RECUSA_SEFAZ"
+      ],
+      "schema": "public"
+    },
+    "public.Role": {
+      "name": "Role",
+      "values": [
+        "FUNCIONARIO",
+        "USER",
+        "ADMIN",
+        "MASTER"
+      ],
+      "schema": "public"
+    },
+    "public.SegmentoProduto": {
+      "name": "SegmentoProduto",
+      "values": [
+        "SECO",
+        "REFR"
+      ],
+      "schema": "public"
+    },
+    "public.StatusDemanda": {
+      "name": "StatusDemanda",
+      "values": [
+        "EM_PROGRESSO",
+        "FINALIZADA",
+        "PAUSA",
+        "CANCELADA"
+      ],
+      "schema": "public"
+    },
+    "public.StatusDevolucao": {
+      "name": "StatusDevolucao",
+      "values": [
+        "AGUARDANDO_LIBERACAO",
+        "AGUARDANDO_CONFERENCIA",
+        "EM_CONFERENCIA",
+        "CONFERENCIA_FINALIZADA",
+        "FINALIZADO",
+        "CANCELADO"
+      ],
+      "schema": "public"
+    },
+    "public.StatusPalete": {
+      "name": "StatusPalete",
+      "values": [
+        "NAO_INICIADO",
+        "EM_PROGRESSO",
+        "CONCLUIDO",
+        "EM_PAUSA"
+      ],
+      "schema": "public"
+    },
+    "public.StatusTransporte": {
+      "name": "StatusTransporte",
+      "values": [
+        "AGUARDANDO_SEPARACAO",
+        "EM_SEPARACAO",
+        "SEPARACAO_CONCLUIDA",
+        "EM_CONFERENCIA",
+        "CONFERENCIA_CONCLUIDA",
+        "EM_CARREGAMENTO",
+        "CARREGAMENTO_CONCLUIDO",
+        "FATURADO",
+        "LIBERADO_PORTARIA",
+        "CANCELADO"
+      ],
+      "schema": "public"
+    },
+    "public.TipoDevolucaoAnomalias": {
+      "name": "TipoDevolucaoAnomalias",
+      "values": [
+        "AVARIA",
+        "FALTA",
+        "SOBRA"
+      ],
+      "schema": "public"
+    },
+    "public.TipoDevolucaoItens": {
+      "name": "TipoDevolucaoItens",
+      "values": [
+        "CONTABIL",
+        "FISICO"
+      ],
+      "schema": "public"
+    },
+    "public.TipoDevolucaoNotas": {
+      "name": "TipoDevolucaoNotas",
+      "values": [
+        "DEVOLUCAO",
+        "DEVOLUCAO_PARCIAL",
+        "REENTREGA"
+      ],
+      "schema": "public"
+    },
+    "public.TipoEvento": {
+      "name": "TipoEvento",
+      "values": [
+        "CRIACAO_TRANSPORTE",
+        "INICIO_SEPARACAO",
+        "TERMINO_SEPARACAO",
+        "INICIO_CONFERENCIA",
+        "TERMINO_CONFERENCIA",
+        "INICIO_CARREGAMENTO",
+        "TERMINO_CARREGAMENTO",
+        "CORTE_PRODUTO",
+        "FATURADO",
+        "LIBERADO_PORTARIA"
+      ],
+      "schema": "public"
+    },
+    "public.TipoImpressao": {
+      "name": "TipoImpressao",
+      "values": [
+        "TRANSPORTE",
+        "CLIENTE"
+      ],
+      "schema": "public"
+    },
+    "public.TipoPeso": {
+      "name": "TipoPeso",
+      "values": [
+        "PVAR",
+        "PPAR"
+      ],
+      "schema": "public"
+    },
+    "public.TipoProcesso": {
+      "name": "TipoProcesso",
+      "values": [
+        "SEPARACAO",
+        "CARREGAMENTO",
+        "CONFERENCIA"
+      ],
+      "schema": "public"
+    },
+    "public.TipoQuebraPalete": {
+      "name": "TipoQuebraPalete",
+      "values": [
+        "LINHAS",
+        "PERCENTUAL"
+      ],
+      "schema": "public"
+    },
+    "public.Turno": {
+      "name": "Turno",
+      "values": [
+        "MANHA",
+        "TARDE",
+        "NOITE",
+        "INTERMEDIARIO",
+        "ADMINISTRATIVO"
+      ],
+      "schema": "public"
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {
+    "public.view_produtividade_por_funcionario_por_dia": {
+      "name": "view_produtividade_por_funcionario_por_dia",
+      "schema": "public",
+      "columns": {
+        "centerid": {
+          "name": "centerid",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "funcionarioid": {
+          "name": "funcionarioid",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "funcionarionome": {
+          "name": "funcionarionome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "data": {
+          "name": "data",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "total_tempo_pausa": {
+          "name": "total_tempo_pausa",
+          "type": "interval",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "total_caixas": {
+          "name": "total_caixas",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tempo_total": {
+          "name": "tempo_total",
+          "type": "interval",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "total_demandas": {
+          "name": "total_demandas",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tempo_trabalhado": {
+          "name": "tempo_trabalhado",
+          "type": "interval",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "total_enderecos_visitados": {
+          "name": "total_enderecos_visitados",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "produtividade_caixa_por_hora": {
+          "name": "produtividade_caixa_por_hora",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "media_enderecos_por_demanda": {
+          "name": "media_enderecos_por_demanda",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "isExisting": false,
+      "definition": "SELECT centerid, funcionarioid, funcionarionome, data, total_tempo_pausa, total_caixas, tempo_total, total_demandas, tempo_trabalhado, total_enderecos_visitados, CASE WHEN EXTRACT(epoch FROM tempo_trabalhado) > 0::numeric THEN total_caixas::numeric / (EXTRACT(epoch FROM tempo_trabalhado) / 3600::numeric) ELSE NULL::numeric END AS produtividade_caixa_por_hora, CASE WHEN total_demandas > 0 THEN total_enderecos_visitados::numeric / total_demandas::numeric ELSE NULL::numeric END AS media_enderecos_por_demanda FROM ( SELECT d.\"centerId\" AS centerid, d.\"funcionarioId\" AS funcionarioid, u.name AS funcionarionome, d.\"criadoEm\"::date AS data, count(d.id) AS total_demandas, sum(p.fim - p.inicio) AS total_tempo_pausa, sum(palete.\"quantidadeCaixas\") AS total_caixas, sum(d.fim - d.inicio) AS tempo_total, sum(palete.\"enderecoVisitado\") AS total_enderecos_visitados, sum(d.fim - d.inicio) - sum(p.fim - p.inicio) AS tempo_trabalhado FROM \"Demanda\" d LEFT JOIN \"User\" u ON u.id = d.\"funcionarioId\" LEFT JOIN \"Pausa\" p ON p.\"demandaId\" = d.id LEFT JOIN \"Palete\" palete ON palete.\"demandaId\" = d.id GROUP BY d.\"centerId\", d.\"funcionarioId\", u.name, (d.\"criadoEm\"::date)) t ORDER BY centerid, funcionarioid, data",
+      "materialized": false
+    },
+    "public.view_produtividade_empresa": {
+      "name": "view_produtividade_empresa",
+      "schema": "public",
+      "columns": {
+        "centerid": {
+          "name": "centerid",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "empresa": {
+          "name": "empresa",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "periodo_inicio": {
+          "name": "periodo_inicio",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "periodo_fim": {
+          "name": "periodo_fim",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "total_tempo_pausa": {
+          "name": "total_tempo_pausa",
+          "type": "interval",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "total_caixas": {
+          "name": "total_caixas",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tempo_total": {
+          "name": "tempo_total",
+          "type": "interval",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "total_demandas": {
+          "name": "total_demandas",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "total_enderecos_visitados": {
+          "name": "total_enderecos_visitados",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tempo_trabalhado": {
+          "name": "tempo_trabalhado",
+          "type": "interval",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "produtividade_caixa_por_hora": {
+          "name": "produtividade_caixa_por_hora",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "media_enderecos_por_demanda": {
+          "name": "media_enderecos_por_demanda",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "isExisting": false,
+      "definition": "SELECT d.\"centerId\" AS centerid, palete.empresa, min(d.\"criadoEm\"::date) AS periodo_inicio, max(d.\"criadoEm\"::date) AS periodo_fim, sum( CASE WHEN p.id IS NOT NULL THEN p.fim - p.inicio ELSE NULL::interval END) AS total_tempo_pausa, sum( CASE WHEN palete.id IS NOT NULL THEN palete.\"quantidadeCaixas\" ELSE NULL::integer END) AS total_caixas, sum(d.fim - d.inicio) AS tempo_total, count(d.id) AS total_demandas, sum( CASE WHEN palete.id IS NOT NULL THEN palete.\"enderecoVisitado\" ELSE NULL::integer END) AS total_enderecos_visitados, sum(d.fim - d.inicio) - sum( CASE WHEN p.id IS NOT NULL THEN p.fim - p.inicio ELSE NULL::interval END) AS tempo_trabalhado, CASE WHEN EXTRACT(epoch FROM sum(d.fim - d.inicio) - sum( CASE WHEN p.id IS NOT NULL THEN p.fim - p.inicio ELSE NULL::interval END)) > 0::numeric THEN sum(palete.\"quantidadeCaixas\")::numeric / (EXTRACT(epoch FROM sum(d.fim - d.inicio) - sum( CASE WHEN p.id IS NOT NULL THEN p.fim - p.inicio ELSE NULL::interval END)) / 3600::numeric) ELSE NULL::numeric END AS produtividade_caixa_por_hora, CASE WHEN count(d.id) > 0 THEN sum( CASE WHEN palete.id IS NOT NULL THEN palete.\"enderecoVisitado\" ELSE NULL::integer END)::numeric / count(d.id)::numeric ELSE NULL::numeric END AS media_enderecos_por_demanda FROM \"Demanda\" d LEFT JOIN \"Pausa\" p ON p.\"demandaId\" = d.id LEFT JOIN \"Palete\" palete ON palete.\"demandaId\" = d.id GROUP BY d.\"centerId\", palete.empresa",
+      "materialized": false
+    },
+    "public.view_produtivdade_processo": {
+      "name": "view_produtivdade_processo",
+      "schema": "public",
+      "columns": {
+        "centerid": {
+          "name": "centerid",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "processo": {
+          "name": "processo",
+          "type": "TipoProcesso",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "turno": {
+          "name": "turno",
+          "type": "Turno",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "criadoem": {
+          "name": "criadoem",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "periodo_inicio": {
+          "name": "periodo_inicio",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "periodo_fim": {
+          "name": "periodo_fim",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "total_tempo_pausa": {
+          "name": "total_tempo_pausa",
+          "type": "interval",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "total_caixas": {
+          "name": "total_caixas",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tempo_total": {
+          "name": "tempo_total",
+          "type": "interval",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "total_demandas": {
+          "name": "total_demandas",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "total_enderecos_visitados": {
+          "name": "total_enderecos_visitados",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tempo_trabalhado": {
+          "name": "tempo_trabalhado",
+          "type": "interval",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "produtividade_caixa_por_hora": {
+          "name": "produtividade_caixa_por_hora",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "media_enderecos_por_demanda": {
+          "name": "media_enderecos_por_demanda",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "isExisting": false,
+      "definition": "SELECT d.\"centerId\" AS centerid, d.processo, d.turno, d.\"criadoEm\" AS criadoem, min(d.\"criadoEm\"::date) AS periodo_inicio, max(d.\"criadoEm\"::date) AS periodo_fim, sum( CASE WHEN p.id IS NOT NULL THEN p.fim - p.inicio ELSE NULL::interval END) AS total_tempo_pausa, sum( CASE WHEN palete.id IS NOT NULL THEN palete.\"quantidadeCaixas\" ELSE NULL::integer END) AS total_caixas, sum(d.fim - d.inicio) AS tempo_total, count(d.id) AS total_demandas, sum( CASE WHEN palete.id IS NOT NULL THEN palete.\"enderecoVisitado\" ELSE NULL::integer END) AS total_enderecos_visitados, sum(d.fim - d.inicio) - sum( CASE WHEN p.id IS NOT NULL THEN p.fim - p.inicio ELSE NULL::interval END) AS tempo_trabalhado, CASE WHEN EXTRACT(epoch FROM sum(d.fim - d.inicio) - sum( CASE WHEN p.id IS NOT NULL THEN p.fim - p.inicio ELSE NULL::interval END)) > 0::numeric THEN sum(palete.\"quantidadeCaixas\")::numeric / (EXTRACT(epoch FROM sum(d.fim - d.inicio) - sum( CASE WHEN p.id IS NOT NULL THEN p.fim - p.inicio ELSE NULL::interval END)) / 3600::numeric) ELSE NULL::numeric END AS produtividade_caixa_por_hora, CASE WHEN count(d.id) > 0 THEN sum( CASE WHEN palete.id IS NOT NULL THEN palete.\"enderecoVisitado\" ELSE NULL::integer END)::numeric / count(d.id)::numeric ELSE NULL::numeric END AS media_enderecos_por_demanda FROM \"Demanda\" d LEFT JOIN \"Pausa\" p ON p.\"demandaId\" = d.id LEFT JOIN \"Palete\" palete ON palete.\"demandaId\" = d.id GROUP BY d.processo, d.turno, d.\"criadoEm\", d.\"centerId\"",
+      "materialized": false
+    },
+    "public.view_produtividade_por_dia": {
+      "name": "view_produtividade_por_dia",
+      "schema": "public",
+      "columns": {
+        "centerid": {
+          "name": "centerid",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "data": {
+          "name": "data",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "total_tempo_pausa": {
+          "name": "total_tempo_pausa",
+          "type": "interval",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "total_caixas": {
+          "name": "total_caixas",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tempo_total": {
+          "name": "tempo_total",
+          "type": "interval",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tempo_trabalhado": {
+          "name": "tempo_trabalhado",
+          "type": "interval",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "processo": {
+          "name": "processo",
+          "type": "TipoProcesso",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "produtividade_caixa_por_hora": {
+          "name": "produtividade_caixa_por_hora",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "isExisting": false,
+      "definition": "SELECT centerid, data, total_tempo_pausa, total_caixas, tempo_total, tempo_trabalhado, processo, CASE WHEN EXTRACT(epoch FROM tempo_trabalhado) > 0::numeric THEN total_caixas::numeric / (EXTRACT(epoch FROM tempo_trabalhado) / 3600::numeric) ELSE NULL::numeric END AS produtividade_caixa_por_hora FROM ( SELECT d.\"centerId\" AS centerid, d.\"criadoEm\"::date AS data, d.processo, sum(p.fim - p.inicio) AS total_tempo_pausa, sum(palete.\"quantidadeCaixas\") AS total_caixas, sum(d.fim - d.inicio) AS tempo_total, sum(d.fim - d.inicio) - sum(p.fim - p.inicio) AS tempo_trabalhado FROM \"Demanda\" d LEFT JOIN \"Pausa\" p ON p.\"demandaId\" = d.id LEFT JOIN \"Palete\" palete ON palete.\"demandaId\" = d.id GROUP BY d.\"centerId\", d.processo, (d.\"criadoEm\"::date)) t ORDER BY centerid, data",
+      "materialized": false
+    },
+    "public.view_demanda_produtividade": {
+      "name": "view_demanda_produtividade",
+      "schema": "public",
+      "columns": {
+        "centerid": {
+          "name": "centerid",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "demandaid": {
+          "name": "demandaid",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "criadoporid": {
+          "name": "criadoporid",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "funcionarioid": {
+          "name": "funcionarioid",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nomefuncionario": {
+          "name": "nomefuncionario",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "data": {
+          "name": "data",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "turno": {
+          "name": "turno",
+          "type": "Turno",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "processo": {
+          "name": "processo",
+          "type": "TipoProcesso",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "inicio": {
+          "name": "inicio",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fim": {
+          "name": "fim",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "StatusDemanda",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "total_unidades": {
+          "name": "total_unidades",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "total_paletes": {
+          "name": "total_paletes",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "total_enderecos_visitado": {
+          "name": "total_enderecos_visitado",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "total_tempo_pausa": {
+          "name": "total_tempo_pausa",
+          "type": "interval",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "total_caixas": {
+          "name": "total_caixas",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tempo_total": {
+          "name": "tempo_total",
+          "type": "interval",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "qtd_paletes": {
+          "name": "qtd_paletes",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "segmento": {
+          "name": "segmento",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "empresa": {
+          "name": "empresa",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tempo_trabalhado": {
+          "name": "tempo_trabalhado",
+          "type": "interval",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "produtividade_caixa_por_hora": {
+          "name": "produtividade_caixa_por_hora",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "isExisting": false,
+      "definition": "SELECT centerid, demandaid, criadoporid, funcionarioid, nomefuncionario, data, turno, processo, inicio, fim, status, total_unidades, total_paletes, total_enderecos_visitado, total_tempo_pausa, total_caixas, tempo_total, qtd_paletes, segmento, empresa, tempo_trabalhado, CASE WHEN EXTRACT(epoch FROM tempo_trabalhado) > 0::numeric THEN total_caixas::numeric / (EXTRACT(epoch FROM tempo_trabalhado) / 3600::numeric) ELSE NULL::numeric END AS produtividade_caixa_por_hora FROM ( SELECT d.\"centerId\" AS centerid, d.\"criadoEm\"::date AS data, d.processo, d.status, d.\"cadastradoPorId\" AS criadoporid, d.\"funcionarioId\" AS funcionarioid, u.name AS nomefuncionario, min(palete.segmento) AS segmento, min(palete.empresa) AS empresa, d.turno, d.id AS demandaid, min(d.inicio) AS inicio, max(d.fim) AS fim, count(palete.\"demandaId\") AS qtd_paletes, COALESCE(sum(p.fim - p.inicio), '00:00:00'::interval) AS total_tempo_pausa, sum(palete.\"quantidadeCaixas\") AS total_caixas, sum(palete.\"quantidadeUnidades\") AS total_unidades, sum(palete.\"enderecoVisitado\") AS total_enderecos_visitado, sum(palete.\"quantidadePaletes\") AS total_paletes, sum(d.fim - d.inicio) AS tempo_total, sum(d.fim - d.inicio) - COALESCE(sum(p.fim - p.inicio), '00:00:00'::interval) AS tempo_trabalhado FROM \"Demanda\" d LEFT JOIN \"Pausa\" p ON p.\"demandaId\" = d.id LEFT JOIN \"Palete\" palete ON palete.\"demandaId\" = d.id LEFT JOIN \"User\" u ON u.id = d.\"funcionarioId\" GROUP BY d.\"cadastradoPorId\", d.\"funcionarioId\", d.id, u.name, d.\"centerId\", (d.\"criadoEm\"::date), d.processo, d.status, d.turno) t ORDER BY centerid, data",
+      "materialized": false
+    },
+    "public.view_produtividade_funcionario": {
+      "name": "view_produtividade_funcionario",
+      "schema": "public",
+      "columns": {
+        "funcionarioid": {
+          "name": "funcionarioid",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "funcionarionome": {
+          "name": "funcionarionome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "processo": {
+          "name": "processo",
+          "type": "TipoProcesso",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "centerid": {
+          "name": "centerid",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "dataregistro": {
+          "name": "dataregistro",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "periodo_inicio": {
+          "name": "periodo_inicio",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "periodo_fim": {
+          "name": "periodo_fim",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "total_tempo_pausa": {
+          "name": "total_tempo_pausa",
+          "type": "interval",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "total_caixas": {
+          "name": "total_caixas",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tempo_total": {
+          "name": "tempo_total",
+          "type": "interval",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "total_demandas": {
+          "name": "total_demandas",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "total_enderecos_visitados": {
+          "name": "total_enderecos_visitados",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tempo_trabalhado": {
+          "name": "tempo_trabalhado",
+          "type": "interval",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "produtividade_caixa_por_hora": {
+          "name": "produtividade_caixa_por_hora",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "media_enderecos_por_demanda": {
+          "name": "media_enderecos_por_demanda",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "segmento": {
+          "name": "segmento",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "isExisting": false,
+      "definition": "SELECT d.\"funcionarioId\" AS funcionarioid, u.name AS funcionarionome, d.processo, d.\"centerId\" AS centerid, d.\"criadoEm\"::date AS dataregistro, min(d.\"criadoEm\"::date) AS periodo_inicio, max(d.\"criadoEm\"::date) AS periodo_fim, sum( CASE WHEN p.id IS NOT NULL THEN p.fim - p.inicio ELSE NULL::interval END) AS total_tempo_pausa, sum( CASE WHEN palete.id IS NOT NULL THEN palete.\"quantidadeCaixas\" ELSE NULL::integer END) AS total_caixas, sum(d.fim - d.inicio) AS tempo_total, count(d.id) AS total_demandas, sum( CASE WHEN palete.id IS NOT NULL THEN palete.\"enderecoVisitado\" ELSE NULL::integer END) AS total_enderecos_visitados, sum(d.fim - d.inicio) - sum( CASE WHEN p.id IS NOT NULL THEN p.fim - p.inicio ELSE NULL::interval END) AS tempo_trabalhado, CASE WHEN EXTRACT(epoch FROM sum(d.fim - d.inicio) - sum( CASE WHEN p.id IS NOT NULL THEN p.fim - p.inicio ELSE NULL::interval END)) > 0::numeric THEN sum(palete.\"quantidadeCaixas\")::numeric / (EXTRACT(epoch FROM sum(d.fim - d.inicio) - sum( CASE WHEN p.id IS NOT NULL THEN p.fim - p.inicio ELSE NULL::interval END)) / 3600::numeric) ELSE NULL::numeric END AS produtividade_caixa_por_hora, CASE WHEN count(d.id) > 0 THEN sum( CASE WHEN palete.id IS NOT NULL THEN palete.\"enderecoVisitado\" ELSE NULL::integer END)::numeric / count(d.id)::numeric ELSE NULL::numeric END AS media_enderecos_por_demanda, palete.segmento FROM \"Demanda\" d LEFT JOIN \"User\" u ON u.id = d.\"funcionarioId\" LEFT JOIN \"Pausa\" p ON p.\"demandaId\" = d.id LEFT JOIN \"Palete\" palete ON palete.\"demandaId\" = d.id GROUP BY d.\"funcionarioId\", u.name, d.\"centerId\", d.processo, (d.\"criadoEm\"::date), palete.segmento ORDER BY u.name",
+      "materialized": false
+    },
+    "public.vw_produtividade_dash": {
+      "name": "vw_produtividade_dash",
+      "schema": "public",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "processo": {
+          "name": "processo",
+          "type": "TipoProcesso",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "StatusDemanda",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "turno": {
+          "name": "turno",
+          "type": "Turno",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cadastradoPorId": {
+          "name": "cadastradoPorId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "funcionarioId": {
+          "name": "funcionarioId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "funcionario_nome": {
+          "name": "funcionario_nome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "centerId": {
+          "name": "centerId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "obs": {
+          "name": "obs",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "transporteId": {
+          "name": "transporteId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "segmento": {
+          "name": "segmento",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "empresa": {
+          "name": "empresa",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "quantidadeCaixas": {
+          "name": "quantidadeCaixas",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "quantidadeUnidades": {
+          "name": "quantidadeUnidades",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "quantidadePaletes": {
+          "name": "quantidadePaletes",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "enderecoVisitado": {
+          "name": "enderecoVisitado",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "criado_em": {
+          "name": "criado_em",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "data_expedicao": {
+          "name": "data_expedicao",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "mes": {
+          "name": "mes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "inicio_ts": {
+          "name": "inicio_ts",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fim_ts": {
+          "name": "fim_ts",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tempo_bruto_interval": {
+          "name": "tempo_bruto_interval",
+          "type": "interval",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "total_pausa_interval": {
+          "name": "total_pausa_interval",
+          "type": "interval",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "total_pausa": {
+          "name": "total_pausa",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tempo_trabalhado": {
+          "name": "tempo_trabalhado",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "caixa_linha": {
+          "name": "caixa_linha",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "produtividade": {
+          "name": "produtividade",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "isExisting": false,
+      "definition": "WITH demanda_calculada AS ( SELECT d_1.id, d_1.processo, d_1.inicio, d_1.fim, d_1.status, d_1.\"cadastradoPorId\", d_1.turno, d_1.\"funcionarioId\", d_1.\"criadoEm\", d_1.\"centerId\", d_1.obs, d_1.\"dataExpedicao\", ((d_1.inicio AT TIME ZONE 'UTC'::text) AT TIME ZONE 'America/Sao_Paulo'::text) AS inicio_ajustado, ((COALESCE(d_1.fim, (now() AT TIME ZONE 'UTC'::text)) AT TIME ZONE 'UTC'::text) AT TIME ZONE 'America/Sao_Paulo'::text) AS fim_ajustado, ((COALESCE(d_1.fim, (now() AT TIME ZONE 'UTC'::text)) AT TIME ZONE 'UTC'::text) AT TIME ZONE 'America/Sao_Paulo'::text) - ((d_1.inicio AT TIME ZONE 'UTC'::text) AT TIME ZONE 'America/Sao_Paulo'::text) AS tempo_bruto_interval FROM \"Demanda\" d_1 ), palete_aggregada AS ( SELECT \"Palete\".\"demandaId\", min(\"Palete\".\"transporteId\") AS \"transporteId\", min(\"Palete\".segmento) AS segmento, min(\"Palete\".empresa) AS empresa, sum(\"Palete\".\"quantidadeCaixas\") AS \"quantidadeCaixas\", sum(\"Palete\".\"quantidadeUnidades\") AS \"quantidadeUnidades\", sum(\"Palete\".\"quantidadePaletes\") AS \"quantidadePaletes\", sum(\"Palete\".\"enderecoVisitado\") AS \"enderecoVisitado\" FROM \"Palete\" GROUP BY \"Palete\".\"demandaId\" ) SELECT d.id, d.processo, d.status, d.turno, d.\"cadastradoPorId\", d.\"funcionarioId\", u.name AS funcionario_nome, d.\"centerId\", d.obs, pal.\"transporteId\", pal.segmento, pal.empresa, pal.\"quantidadeCaixas\", pal.\"quantidadeUnidades\", pal.\"quantidadePaletes\", pal.\"enderecoVisitado\", ((d.\"criadoEm\" AT TIME ZONE 'UTC'::text) AT TIME ZONE 'America/Sao_Paulo'::text) AS criado_em, to_char(((d.\"dataExpedicao\" AT TIME ZONE 'UTC'::text) AT TIME ZONE 'America/Sao_Paulo'::text), 'YYYY-MM-DD'::text) AS data_expedicao, to_char(((d.\"dataExpedicao\" AT TIME ZONE 'UTC'::text) AT TIME ZONE 'America/Sao_Paulo'::text), 'YYYY-MM'::text) AS mes, d.inicio_ajustado AS inicio_ts, d.fim_ajustado AS fim_ts, d.tempo_bruto_interval, CASE WHEN count(p.inicio) = 0 THEN NULL::interval ELSE sum(((COALESCE(p.fim, (now() AT TIME ZONE 'UTC'::text)) AT TIME ZONE 'UTC'::text) AT TIME ZONE 'America/Sao_Paulo'::text) - ((p.inicio AT TIME ZONE 'UTC'::text) AT TIME ZONE 'America/Sao_Paulo'::text)) END AS total_pausa_interval, to_char( CASE WHEN count(p.inicio) = 0 THEN NULL::interval ELSE sum(((COALESCE(p.fim, (now() AT TIME ZONE 'UTC'::text)) AT TIME ZONE 'UTC'::text) AT TIME ZONE 'America/Sao_Paulo'::text) - ((p.inicio AT TIME ZONE 'UTC'::text) AT TIME ZONE 'America/Sao_Paulo'::text)) END, 'HH24:MI'::text) AS total_pausa, to_char(d.tempo_bruto_interval - COALESCE(sum(((COALESCE(p.fim, (now() AT TIME ZONE 'UTC'::text)) AT TIME ZONE 'UTC'::text) AT TIME ZONE 'America/Sao_Paulo'::text) - ((p.inicio AT TIME ZONE 'UTC'::text) AT TIME ZONE 'America/Sao_Paulo'::text)), '00:00:00'::interval), 'HH24:MI'::text) AS tempo_trabalhado, ceil(pal.\"quantidadeCaixas\"::numeric / NULLIF(pal.\"enderecoVisitado\", 0)::numeric)::integer AS caixa_linha, ceil(pal.\"quantidadeCaixas\"::numeric / NULLIF(EXTRACT(epoch FROM d.tempo_bruto_interval - COALESCE(sum(((COALESCE(p.fim, (now() AT TIME ZONE 'UTC'::text)) AT TIME ZONE 'UTC'::text) AT TIME ZONE 'America/Sao_Paulo'::text) - ((p.inicio AT TIME ZONE 'UTC'::text) AT TIME ZONE 'America/Sao_Paulo'::text)), '00:00:00'::interval)) / 3600.0, 0::numeric))::integer AS produtividade FROM demanda_calculada d LEFT JOIN \"Pausa\" p ON p.\"demandaId\" = d.id LEFT JOIN palete_aggregada pal ON pal.\"demandaId\" = d.id LEFT JOIN \"User\" u ON u.id = d.\"funcionarioId\" GROUP BY d.id, d.processo, d.status, d.turno, d.\"cadastradoPorId\", d.\"funcionarioId\", u.name, d.\"centerId\", d.obs, d.\"criadoEm\", d.\"dataExpedicao\", d.inicio_ajustado, d.fim_ajustado, d.tempo_bruto_interval, pal.\"transporteId\", pal.segmento, pal.empresa, pal.\"quantidadeCaixas\", pal.\"quantidadeUnidades\", pal.\"quantidadePaletes\", pal.\"enderecoVisitado\"",
+      "materialized": false
+    }
+  },
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "tables": {
+      "ConfiguracaoImpressaoMapa": {
+        "columns": {
+          "segregarFifo": {
+            "isArray": true,
+            "dimensions": 1,
+            "rawType": "text"
+          },
+          "ordemConferencia": {
+            "isArray": true,
+            "dimensions": 1,
+            "rawType": "text"
+          },
+          "ordemFifo": {
+            "isArray": true,
+            "dimensions": 1,
+            "rawType": "text"
+          },
+          "ordemPaletes": {
+            "isArray": true,
+            "dimensions": 1,
+            "rawType": "text"
+          },
+          "ordemPicking": {
+            "isArray": true,
+            "dimensions": 1,
+            "rawType": "text"
+          },
+          "ordemUnidades": {
+            "isArray": true,
+            "dimensions": 1,
+            "rawType": "text"
+          }
+        }
+      },
+      "devolucao_check_list": {
+        "columns": {
+          "anomalias": {
+            "isArray": true,
+            "dimensions": 1,
+            "rawType": "text"
+          }
+        }
+      },
+      "UserCenter": {
+        "columns": {
+          "roles": {
+            "isArray": true,
+            "dimensions": 1,
+            "rawType": "text"
+          }
+        }
+      }
+    }
+  }
+}
