@@ -7,7 +7,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(cookieParser());
   app.enableCors({
-    origin: true, // permite todas as origens (pode substituir pelo domínio específico)
+    origin: ['http://localhost:3000', 'https://pwa.lilog.app'], // permite todas as origens (pode substituir pelo domínio específico)
     credentials: true,
   });
   app.setGlobalPrefix('api');
