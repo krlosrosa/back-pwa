@@ -1,12 +1,12 @@
 version: '3.8'
 
 services:
-  lilog-nest-backend:
+  pwaback:
     build:
       context: .
       args:
         - DATABASE_URL=${DATABASE_URL}
-    container_name: lilog-nest-backend
+    container_name: pwaback
     restart: unless-stopped
     environment:
       - NODE_ENV=${NODE_ENV:-production}
@@ -28,10 +28,10 @@ services:
     labels:
       # --- Habilita o Traefik para este serviço ---
       - "traefik.enable=true"
-      - "traefik.http.routers.lilog-nest-backend.rule=Host(`${PRODUTIVIDADE_HOST}`)"
-      - "traefik.http.routers.lilog-nest-backend.service=lilog-nest-backend"
-      - "traefik.http.routers.lilog-nest-backend.tls.certresolver=letsencrypt"
-      - "traefik.http.services.lilog-nest-backend.loadbalancer.server.port=4000"
+      - "traefik.http.routers.pwaback.rule=Host(`${PRODUTIVIDADE_HOST}`)"
+      - "traefik.http.routers.pwaback.service=pwaback"
+      - "traefik.http.routers.pwaback.tls.certresolver=letsencrypt"
+      - "traefik.http.services.pwaback.loadbalancer.server.port=4000"
 
 networks:
   proxy:

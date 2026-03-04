@@ -1,12 +1,12 @@
 version: '3.8'
 
 services:
-  produtividadenestdev:
+  pwaback:
     build:
       context: .
       args:
         - DATABASE_URL=${DATABASE_URL}
-    container_name: produtividadenestdev
+    container_name: pwaback
     restart: unless-stopped
     environment:
       - NODE_ENV=${NODE_ENV:-production}
@@ -28,10 +28,10 @@ services:
     labels:
       # --- Habilita o Traefik para este serviço ---
       - "traefik.enable=true"
-      - "traefik.http.routers.produtividadenestdev.rule=Host(`${PRODUTIVIDADE_HOST}`)"
-      - "traefik.http.routers.produtividadenestdev.service=produtividadenestdev"
-      - "traefik.http.routers.produtividadenestdev.tls.certresolver=letsencrypt"
-      - "traefik.http.services.produtividadenestdev.loadbalancer.server.port=4000"
+      - "traefik.http.routers.pwaback.rule=Host(`${PRODUTIVIDADE_HOST}`)"
+      - "traefik.http.routers.pwaback.service=pwaback"
+      - "traefik.http.routers.pwaback.tls.certresolver=letsencrypt"
+      - "traefik.http.services.pwaback.loadbalancer.server.port=4000"
 
 networks:
   proxy:
