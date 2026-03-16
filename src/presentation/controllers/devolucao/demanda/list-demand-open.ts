@@ -8,7 +8,7 @@ import { AccountId } from '../../../../main/decorators/account-id.decorator.js';
 
 @ApiController({ tag: 'Devolucao', path: 'devolucao' })
 export class ListDemandOpenController {
-  constructor(private readonly listDemandOpenUseCase: ListDemandOpen) { }
+  constructor(private readonly listDemandOpenUseCase: ListDemandOpen) {}
 
   @Get('listar-demandas-em-aberto/:centerId')
   @ApiOperation({
@@ -24,7 +24,10 @@ export class ListDemandOpenController {
     @Param('centerId') centerId: string,
     @AccountId() accountId: string,
   ): Promise<DemandDto[]> {
-    const demandas = await this.listDemandOpenUseCase.execute(centerId, accountId);
+    const demandas = await this.listDemandOpenUseCase.execute(
+      centerId,
+      accountId,
+    );
     console.log(demandas);
     return demandas;
   }

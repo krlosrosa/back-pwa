@@ -24,6 +24,8 @@ import { RemoveImagensBucketUseCase } from './minio/remove-imagens-bucket.js';
 import { AddNewDemand } from './demanda/add-new-demand.js';
 import { GetInfoByViagemId } from './demanda/get-info-by-viagemId.js';
 import { GetResultadoDemanda } from './demanda/get-result-demand.js';
+import { GetByDemandaCompactUseCase } from './demanda/get-by-demanda-compact.js';
+import { FinalizarDemandaCompactaUseCase } from './demanda/finalizar-demanda-compacta.js';
 
 export const devolucaoUseCases = [
   GetResultadoDemanda, // Vem da pasta Application
@@ -52,4 +54,6 @@ export const devolucaoUseCases = [
   UpdateContagemCegaUseCase,
   AddUrlToDemanda,
   AddImagemAnomalia,
+  GetByDemandaCompactUseCase,
+  FinalizarDemandaCompactaUseCase,
 ];

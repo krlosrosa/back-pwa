@@ -20,9 +20,8 @@ export class KeycloakService implements IIdentityUserRepository {
 
   private async getClient(): Promise<any> {
     if (!this.kcAdminClient) {
-      const { default: KcAdminClient } = await import(
-        '@keycloak/keycloak-admin-client'
-      );
+      const { default: KcAdminClient } =
+        await import('@keycloak/keycloak-admin-client');
       this.kcAdminClient = new KcAdminClient({
         baseUrl: process.env.KEYCLOAK_URL,
         realmName: process.env.REALM_NAME,

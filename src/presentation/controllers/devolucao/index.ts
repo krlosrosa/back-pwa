@@ -23,6 +23,8 @@ import { ListDemandasByCenterAndDataController } from './demanda/list-demanda-by
 import { PresignedUrlDevolucaoController } from './imagens/presigned-url-devolucao.js';
 import { RemoveImangesBucketController } from './imagens/removeImangesBucket.js';
 import { StartDemandaDevolucaoController } from './demanda/start-demanda-devolucao.js';
+import { GetByDemandaCompactController } from './demanda/get-by-demanda-compact.js';
+import { FinalizarDemandaCompactaController } from './demanda/finalizar-demanda-compacta.js';
 
 export const devolucaoControllers = [
   GetResultDemandByIdController, // Vem da pasta Presentation
@@ -50,4 +52,6 @@ export const devolucaoControllers = [
   UpdateContagemCegaController,
   AddImangesCheckListController,
   AddImagemAnomaliaController,
+  GetByDemandaCompactController,
+  FinalizarDemandaCompactaController,
 ];
