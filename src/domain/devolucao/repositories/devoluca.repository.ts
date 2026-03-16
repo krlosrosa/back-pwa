@@ -6,6 +6,7 @@ import { DemandDto } from '../model/demanda-retorno.schema.js';
 import { GetAnomaliasByDemandaDto } from '../model/get-anomalias-by-demanda.schema.js';
 import { ItensContabilDto } from '../model/get-itens-contabil.schema.js';
 import { GetItensDemandaDto } from '../model/get-itens.demanda.schema.js';
+import { DemandCompactDto } from '../model/get-demanda-compact.schema.js';
 
 export interface IDevolucaoRepository {
   findById(id: number): Promise<any>;
@@ -53,5 +54,10 @@ export interface IDevolucaoRepository {
   updateContagemCega(
     uuid: string,
     contagem: Partial<AddConferenciaCegaDto>,
+  ): Promise<void>;
+  findDemandaCompact(demandaId: number): Promise<DemandCompactDto>;
+  finalizarDemandaCompacta(
+    demandaId: number,
+    demanda: DemandCompactDto,
   ): Promise<void>;
 }

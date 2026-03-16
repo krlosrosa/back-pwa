@@ -24,7 +24,7 @@ export class AnomaliaDrizzleRepository implements IAnomaliaDevolucaoRepository {
         .where(
           and(
             eq(devolucaImagens.processo, 'devolucao-anomalias'),
-            eq(devolucaImagens.tag, anomaliaId),
+            eq(devolucaImagens.demandaId, Number(anomaliaId)),
           ),
         );
     });

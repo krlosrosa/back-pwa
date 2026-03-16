@@ -24,6 +24,11 @@ import { AddConferenciaCegaDto } from '../../domain/devolucao/model/add-contagem
 import { AddAnomaliaDto } from '../../domain/devolucao/model/add-anomalia.schema.js';
 import { GetItensDemandaDto } from '../../domain/devolucao/model/get-itens.demanda.schema.js';
 import { GetAnomaliasByDemandaDto } from '../../domain/devolucao/model/get-anomalias-by-demanda.schema.js';
+import {
+  DemandCompactDto,
+  DemandItemCompact,
+  AnomaliaCompact,
+} from '../../domain/devolucao/model/get-demanda-compact.schema.js';
 
 @Injectable()
 export class DevolucaoDrizzleRepository implements IDevolucaoRepository {
@@ -392,6 +397,260 @@ export class DevolucaoDrizzleRepository implements IDevolucaoRepository {
       demandaId: Number(demandaId),
       processo: processo,
       tag: tag,
+    });
+  }
+
+  async findDemandaCompact(demandaId: number): Promise<DemandCompactDto> {
+    const statusMap: Record<string, 'open' | 'in_conference' | 'completed'> = {
+      AGUARDANDO_LIBERACAO: 'open',
+      AGUARDANDO_CONFERENCIA: 'open',
+      EM_CONFERENCIA: 'in_conference',
+      CONFERENCIA_FINALIZADA: 'completed',
+      FINALIZADO: 'completed',
+      CANCELADO: 'completed',
+    };
+
+    const [demandaRows, checklistRows, itens, anomalias, imagens] =
+      await Promise.all([
+        this.db
+          .select()
+          .from(devolucaoDemanda)
+          .where(eq(devolucaoDemanda.id, demandaId))
+          .limit(1),
+        this.db
+          .select()
+          .from(devolucaoCheckList)
+          .where(eq(devolucaoCheckList.demandaId, demandaId))
+          .limit(1),
+        this.db.query.devolucaoItens.findMany({
+          where: eq(devolucaoItens.demandaId, demandaId),
+          with: { devolucaoNota: true },
+        }),
+        this.db
+          .select()
+          .from(devolucaoAnomalias)
+          .where(eq(devolucaoAnomalias.demandaId, demandaId)),
+        this.db
+          .select()
+          .from(devolucaImagens)
+          .where(eq(devolucaImagens.demandaId, demandaId)),
+      ]);
+
+    const demanda = demandaRows[0];
+    if (!demanda) {
+      return null as unknown as DemandCompactDto;
+    }
+
+    const contabilItens = itens.filter((i) => i.tipo === 'CONTABIL');
+    const fisicoItens = itens.filter((i) => i.tipo === 'FISICO');
+
+    const itemsMap = new Map<string, DemandItemCompact>();
+
+    for (const item of contabilItens) {
+      const isReentrega = item.devolucaoNota?.tipo === 'REENTREGA';
+      const key = item.sku;
+      if (!itemsMap.has(key)) {
+        itemsMap.set(key, {
+          id: item.uuid || item.id.toString(),
+          codigoProduto: item.sku,
+          descricao: item.descricao,
+          caixasEsperadas: item.quantidadeCaixas || 0,
+          unidadesEsperadas: item.quantidadeUnidades || 0,
+          isReentrega,
+          conferencias: [],
+          anomalias: [],
+        });
+      } else {
+        const existing = itemsMap.get(key)!;
+        existing.caixasEsperadas += item.quantidadeCaixas || 0;
+        existing.unidadesEsperadas += item.quantidadeUnidades || 0;
+      }
+    }
+
+    for (const item of fisicoItens) {
+      const key = item.sku;
+      if (!itemsMap.has(key)) {
+        itemsMap.set(key, {
+          id: item.uuid || item.id.toString(),
+          codigoProduto: item.sku,
+          descricao: item.descricao,
+          caixasEsperadas: 0,
+          unidadesEsperadas: 0,
+          isReentrega: false,
+          conferencias: [],
+          anomalias: [],
+          extra: true,
+        });
+      }
+      itemsMap.get(key)!.conferencias.push({
+        id: item.uuid || item.id.toString(),
+        codigoProduto: item.sku,
+        lote: item.lote || undefined,
+        caixas: item.quantidadeCaixas || 0,
+        unidades: item.quantidadeUnidades || 0,
+      });
+    }
+
+    for (const anomalia of anomalias) {
+      const key = anomalia.sku;
+      const fotos = imagens
+        .filter((img) => img.processo === 'devolucao-anomalias')
+        .map((img) => img.tag);
+
+      const anomaliaItem: AnomaliaCompact = {
+        id: anomalia.uuid || anomalia.id.toString(),
+        natureza: anomalia.natureza || undefined,
+        tipo: anomalia.tipo,
+        causa: anomalia.causa || undefined,
+        fotos,
+        observacoes: undefined,
+        caixasDanificadas: anomalia.quantidadeCaixas,
+        unidadesDanificadas: anomalia.quantidadeUnidades,
+        lote: anomalia.lote,
+      };
+
+      if (itemsMap.has(key)) {
+        itemsMap.get(key)!.anomalias.push(anomaliaItem);
+      } else {
+        itemsMap.set(key, {
+          id: anomalia.uuid || anomalia.id.toString(),
+          codigoProduto: anomalia.sku,
+          descricao: anomalia.descricao,
+          caixasEsperadas: 0,
+          unidadesEsperadas: 0,
+          isReentrega: false,
+          conferencias: [],
+          anomalias: [anomaliaItem],
+          extra: true,
+        });
+      }
+    }
+
+    const checklistData = checklistRows[0];
+
+    return {
+      id: demanda.id.toString(),
+      status: statusMap[demanda.status] || 'open',
+      paletesEsperadas: demanda.quantidadePaletes || 0,
+      paletesReceptadas: fisicoItens.length,
+      doca: demanda.doca || undefined,
+      dataGeracao: demanda.criadoEm,
+      responsavel: demanda.conferenteId || undefined,
+      placa: demanda.placa,
+      docaRecepcao: demanda.doca || undefined,
+      isSegregada: demanda.cargaSegregada,
+      checklist: checklistData
+        ? {
+            temperaturaTrunk: checklistData.temperaturaBau,
+            temperaturaProduto: checklistData.temperaturaProduto,
+            observacoes: undefined,
+          }
+        : undefined,
+      items: Array.from(itemsMap.values()),
+      sync: 'sync',
+    };
+  }
+
+  async finalizarDemandaCompacta(
+    demandaId: number,
+    demanda: DemandCompactDto,
+  ): Promise<void> {
+    await this.db.transaction(async (tx) => {
+      // Remove conferencias (itens FISICO), anomalias e imagens existentes
+      await tx
+        .delete(devolucaoItens)
+        .where(
+          and(
+            eq(devolucaoItens.demandaId, demandaId),
+            eq(devolucaoItens.tipo, 'FISICO'),
+          ),
+        );
+
+      await tx
+        .delete(devolucaoAnomalias)
+        .where(eq(devolucaoAnomalias.demandaId, demandaId));
+
+      await tx
+        .delete(devolucaImagens)
+        .where(
+          and(
+            eq(devolucaImagens.demandaId, demandaId),
+            eq(devolucaImagens.processo, 'devolucao-anomalias'),
+          ),
+        );
+
+      // Reconstrói conferencias (itens FISICO) agrupadas por item
+      const fisicoItens = demanda.items.flatMap((item) =>
+        item.conferencias.map((conf) => ({
+          uuid: conf.id,
+          sku: conf.codigoProduto,
+          descricao: item.descricao,
+          lote: conf.lote || null,
+          quantidadeCaixas: conf.caixas,
+          quantidadeUnidades: conf.unidades,
+          tipo: 'FISICO' as const,
+          demandaId,
+        })),
+      );
+
+      if (fisicoItens.length > 0) {
+        await tx.insert(devolucaoItens).values(fisicoItens);
+      }
+
+      // Reconstrói anomalias e suas fotos
+      const todasAnomalias = demanda.items.flatMap((item) =>
+        item.anomalias.map((anomalia) => ({
+          uuid: anomalia.id,
+          sku: item.codigoProduto,
+          descricao: item.descricao,
+          lote: anomalia.lote,
+          tipo: anomalia.tipo,
+          natureza: anomalia.natureza || null,
+          causa: anomalia.causa || null,
+          quantidadeCaixas: anomalia.caixasDanificadas,
+          quantidadeUnidades: anomalia.unidadesDanificadas,
+          demandaId,
+          criadoEm: new Date().toISOString(),
+          atualizadoEm: new Date().toISOString(),
+          fotos: anomalia.fotos,
+        })),
+      );
+
+      for (const anomalia of todasAnomalias) {
+        const { fotos, ...anomaliaData } = anomalia;
+        await tx.insert(devolucaoAnomalias).values(anomaliaData);
+
+        if (fotos.length > 0) {
+          await tx.insert(devolucaImagens).values(
+            fotos.map((tag) => ({
+              demandaId,
+              processo: 'devolucao-anomalias',
+              tag,
+            })),
+          );
+        }
+      }
+
+      // Upsert do checklist
+      if (demanda.checklist) {
+        await tx
+          .insert(devolucaoCheckList)
+          .values({
+            demandaId,
+            temperaturaBau: demanda.checklist.temperaturaTrunk ?? 0,
+            temperaturaProduto: demanda.checklist.temperaturaProduto ?? 0,
+            anomalias: [],
+            atualizadoEm: new Date().toISOString(),
+          })
+          .onConflictDoUpdate({
+            target: devolucaoCheckList.demandaId,
+            set: {
+              temperaturaBau: demanda.checklist.temperaturaTrunk ?? 0,
+              temperaturaProduto: demanda.checklist.temperaturaProduto ?? 0,
+              atualizadoEm: new Date().toISOString(),
+            },
+          });
+      }
     });
   }
 
